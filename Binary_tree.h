@@ -27,6 +27,8 @@ public:
     void postorder_iter() const;
     void levelorder_iter() const;
     
+    int high() const;
+    
     void insert(TreeNode<T>*);
     void clear();
 
@@ -35,7 +37,10 @@ private:
     void inorder_rec_helper(TreeNode<T>*) const;
     void postorder_rec_helper(TreeNode<T>*) const;
     void levelorder_rec_helper(TreeNode<T>*) const;
+    void printCurrentLevel(TreeNode<T>*, int) const;
     void clear_helper(TreeNode<T>*);
+    
+    int high_helper(TreeNode<T>*) const;
     
 private:
     TreeNode<T>* m_root;
@@ -85,24 +90,28 @@ template <typename T>
 void BinaryTree<T>::preorder_rec() const 
 {
     preorder_rec_helper(m_root);
+    std::cout << std::endl;
 }
 
 template <typename T>
 void BinaryTree<T>::inorder_rec() const 
 {
     inorder_rec_helper(m_root);
+    std::cout << std::endl;
 }
 
 template <typename T>
 void BinaryTree<T>::postorder_rec() const 
 {
     postorder_rec_helper(m_root);
+    std::cout << std::endl;
 }
 
 template <typename T>
 void BinaryTree<T>::levelorder_rec() const
 {
     levelorder_rec_helper(m_root);
+    std::cout << std::endl;
 }
 
 template <typename T>
@@ -122,11 +131,10 @@ void BinaryTree<T>::preorder_iter() const
             r = r->left;
         }
         if(s.empty())
-            return
+            return;
         r = s.top();
         s.pop();
     }
-    std::cout << std::endl;
 }
 
 template <typename T>
@@ -142,7 +150,7 @@ void BinaryTree<T>::inorder_iter() const
             r = r->left;
         }
         if(s.empty())
-            return
+            return;
         r = s.top();
         s.pop();
         std::cout << r->data << " ";
@@ -168,7 +176,7 @@ void BinaryTree<T>::postorder_iter() const
             r = r->left;
         }
         if(s.empty())
-            return
+            return;
         r = s.top();
         s.pop();
         if(r->right && !s.empty() && r->right == s.top())
@@ -209,6 +217,12 @@ void BinaryTree<T>::levelorder_iter() const
 }
 
 template <typename T>
+int BinaryTree<T>::high() const
+{
+    return high_helper(m_root);
+}
+
+template <typename T>
 void BinaryTree<T>::insert(TreeNode<T>* p)
 {
     //TODO;
@@ -226,7 +240,7 @@ template <typename T>
 void BinaryTree<T>::preorder_rec_helper(TreeNode<T>* p) const
 {
     if(p == nullptr)
-        return
+        return;
     std::cout << p->data << " ";
     preorder_rec_helper(p->left);
     preorder_rec_helper(p->right);
@@ -236,7 +250,7 @@ template <typename T>
 void BinaryTree<T>::inorder_rec_helper(TreeNode<T>* p) const
 {
     if(p == nullptr)
-        return
+        return;
     inorder_rec_helper(p->left);
     std::cout << p->data << " ";
     inorder_rec_helper(p->right);
@@ -246,26 +260,52 @@ template <typename T>
 void BinaryTree<T>::postorder_rec_helper(TreeNode<T>* p) const
 {
     if(p == nullptr)
-        return
+        return;
     postorder_rec_helper(p->left);
     postorder_rec_helper(p->right);
     std::cout << p->data << " ";
 }
 
 template <typename T>
-void BinaryTree<T>::levelorder_rec_helper(TreeNode<T>* p)
+void BinaryTree<T>::levelorder_rec_helper(TreeNode<T>* p) const
 {
-    //TODO;
+    int h = high();
+    for(int i = 0; i <= h; ++i)
+    {
+        printCurrentLevel(p, i);
+    }
+    std::cout << std::endl;
 }
 
+template <typename T>
+void BinaryTree<T>::printCurrentLevel(TreeNode<T>* r, int level) const
+{
+    if(r == nullptr)
+        return;
+    if(level == 1)
+        std::cout << r->data << " ";
+    else if(level > 1)
+    {
+        printCurrentLevel(r->left, level - 1);
+        printCurrentLevel(r->right, level - 1);
+    }
+}
 
 template <typename T>
 void BinaryTree<T>::clear_helper(TreeNode<T>* p)
 {
     if(p == nullptr)
-        return
+        return;
     clear_helper(p->left);
     clear_helper(p->right);
     delete p;
     p = nullptr;
+}
+
+template <typename T>
+int BinaryTree<T>::high_helper(TreeNode<T>* r) const
+{
+    if(r == nullptr)
+        return 0;
+    return high_helper(r->left) > high_helper(r->right) ? high_helper(r->left) + 1 : high_helper(r->right) + 1;
 }
