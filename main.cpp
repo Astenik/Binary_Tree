@@ -5,7 +5,7 @@
 
 int main()
 {
-    TreeNode<char>* g = new TreeNode<char>('g');
+        TreeNode<char>* g = new TreeNode<char>('g');
 	TreeNode<char>* h = new TreeNode<char>('h');
 	TreeNode<char>* d = new TreeNode<char>('d', g, h);
 	TreeNode<char>* b = new TreeNode<char>('b', nullptr, d);
@@ -24,26 +24,33 @@ int main()
 
 	std::cout << "preorderI: " << std::endl;
 	t.preorder_iter();
+	std::cout << std::endl;
 
 	std::cout << "inorder: " << std::endl;
 	t.inorder_rec();
 
 	std::cout << "inorderI: " << std::endl;
 	t.inorder_iter();
+	std::cout << std::endl;
 
 	std::cout << "postorder: " << std::endl;
 	t.postorder_rec();
 
 	std::cout << "postorderI: " << std::endl;
 	t.postorder_iter();
+	std::cout << std::endl;
 
 	std::cout << "levelorderI" << std::endl;
 	t.levelorder_iter();
+	std::cout << std::endl;
 	
 	std::cout << "levelorderRec" << std::endl;
 	t.levelorder_rec();
 	
-    std::cout << t.high() << std::endl;
+        std::cout << "the height of tree is " << t.height() << std::endl;
+        std::cout << "the width of tree is " << t.width() << std::endl;
+        std::cout << "count of leaves is " << t.count_of_leaves() << std::endl;
+        std::cout << "count of nodes is " << t.count_of_nodes() << std::endl;
 	
 	return 0;
 }
