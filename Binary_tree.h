@@ -12,7 +12,6 @@ class BinaryTree
 public:
     BinaryTree();
     BinaryTree(TreeNode<T>*);
-    BinaryTree(const BinaryTree<T>&);
     BinaryTree(const BinaryTree<T>&&);
     ~BinaryTree();
     
@@ -27,9 +26,11 @@ public:
     void postorder_iter() const;
     void levelorder_iter() const;
     
-    int high() const;
+    int height() const;
+    int width() const; 
+    int count_of_leaves() const;
+    int count_of_nodes() const;
     
-    void insert(TreeNode<T>*);
     void clear();
 
 private:
@@ -40,9 +41,9 @@ private:
     void printCurrentLevel(TreeNode<T>*, int) const;
     void clear_helper(TreeNode<T>*);
     
-    int high_helper(TreeNode<T>*) const;
+    int height_helper(TreeNode<T>*) const;
     
-private:
+protected:
     TreeNode<T>* m_root;
 };
 
@@ -58,15 +59,6 @@ BinaryTree<T>::BinaryTree(TreeNode<T>* root)
     : m_root(root)
 {
     std::cout << "ctor with perimeters" << std::endl;
-}
-
-template <typename T>
-BinaryTree<T>::BinaryTree(const BinaryTree<T>& obj)
-    : m_root(nullptr)
-{
-    //TODO!!
-    
-    std::cout << "copy ctor" << std::endl;
 }
 
 template <typename T>
@@ -217,23 +209,97 @@ void BinaryTree<T>::levelorder_iter() const
 }
 
 template <typename T>
-int BinaryTree<T>::high() const
+int BinaryTree<T>::height() const
 {
-    return high_helper(m_root);
+    return height_helper(m_root) - 1;
 }
-
-template <typename T>
-void BinaryTree<T>::insert(TreeNode<T>* p)
-{
-    //TODO;
-}
-
 
 template <typename T>
 void BinaryTree<T>::clear()
 {
     clear_helper(m_root);
     m_root = nullptr;
+}
+
+template <typename T>
+int BinaryTree<T>::width() const
+{
+    if(m_root == nullptr)
+        return 0;
+    std::queue<TreeNode<T>*> q;
+    q.push(m_root);
+    int w = 1;
+    while(!q.empty())
+    {
+        const int count = q.size();
+        if(count > w)
+        {
+            w = count;
+        }
+        for(int i = 0; i < count; ++i)
+        {
+            TreeNode<T>* p = q.front();
+            q.pop();
+            if(p->left)
+            {
+                q.push(p->left);
+            }
+            if(p->right)
+            {
+                q.push(p->right);
+            }
+        }
+    }
+    return w;
+}
+
+template <typename T>
+int BinaryTree<T>::count_of_leaves() const
+{
+    int count = 0;
+    std::queue<TreeNode<T>*> q;
+    q.push(m_root);
+    while(!q.empty())
+    {
+        TreeNode<T>* r = q.front();
+        q.pop();
+        if(r->left == nullptr && r->right == nullptr)
+        {
+            ++count;
+        }
+        if(r->left)
+        {
+            q.push(r->left);
+        }
+        if(r->right)
+        {
+            q.push(r->right);
+        }
+    }
+    return count;
+}
+
+template <typename T>
+int BinaryTree<T>::count_of_nodes() const
+{
+    int count = 0;
+    std::queue<TreeNode<T>*> q;
+    q.push(m_root);
+    while(!q.empty())
+    {
+        TreeNode<T>* r = q.front();
+        q.pop();
+        ++count;
+        if(r->left)
+        {
+            q.push(r->left);
+        }
+        if(r->right)
+        {
+            q.push(r->right);
+        }
+    }
+    return count;
 }
 
 template <typename T>
@@ -269,7 +335,7 @@ void BinaryTree<T>::postorder_rec_helper(TreeNode<T>* p) const
 template <typename T>
 void BinaryTree<T>::levelorder_rec_helper(TreeNode<T>* p) const
 {
-    int h = high();
+    int h = height();
     for(int i = 0; i <= h; ++i)
     {
         printCurrentLevel(p, i);
@@ -282,9 +348,9 @@ void BinaryTree<T>::printCurrentLevel(TreeNode<T>* r, int level) const
 {
     if(r == nullptr)
         return;
-    if(level == 1)
+    if(level == 0)
         std::cout << r->data << " ";
-    else if(level > 1)
+    else if(level > 0)
     {
         printCurrentLevel(r->left, level - 1);
         printCurrentLevel(r->right, level - 1);
@@ -303,9 +369,9 @@ void BinaryTree<T>::clear_helper(TreeNode<T>* p)
 }
 
 template <typename T>
-int BinaryTree<T>::high_helper(TreeNode<T>* r) const
+int BinaryTree<T>::height_helper(TreeNode<T>* r) const
 {
     if(r == nullptr)
         return 0;
-    return high_helper(r->left) > high_helper(r->right) ? high_helper(r->left) + 1 : high_helper(r->right) + 1;
+    return 1 + std::max(height_helper(r->right), height_helper(r->left));
 }
