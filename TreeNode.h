@@ -1,9 +1,9 @@
 #pragma once
 
 template <typename T>
-struck TreeNode
+struct TreeNode
 {
-    TreeNode(const T& d, TreeNode<T>* l, TreeNode<T>* r)
+    TreeNode(const T& d, TreeNode<T>* l = nullptr, TreeNode<T>* r = nullptr)
         : data(d)
         , left(l)
         , right(r)
