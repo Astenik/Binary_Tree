@@ -121,3 +121,29 @@ void BST<T>::right_left_rotate(TreeNode<T>* p)
     right_rotate(p->right);
     left_rotate(p);
 }
+
+template <typename T>
+TreeNode<T>* BST<T>::find(const T& key) const
+{
+    if(this->m_root == nullptr)
+    {
+        return nullptr;
+    }
+    TreeNode<T>* r = this->m_root;
+    while(r)
+    {
+        if(r->data == key)
+        {
+            return r;
+        }
+        else if(r->data > key)
+        {
+            r = r->left;
+        }
+        else
+        {
+            r = r->right;
+        }
+    }
+    return nullptr;
+}
