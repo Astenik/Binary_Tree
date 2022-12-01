@@ -5,17 +5,17 @@
 
 int main()
 {
-        TreeNode<char>* g = new TreeNode<char>('g');
+    TreeNode<char>* g = new TreeNode<char>('g');
 	TreeNode<char>* h = new TreeNode<char>('h');
-	TreeNode<char>* d = new TreeNode<char>('d', g, h);
-	TreeNode<char>* b = new TreeNode<char>('b', nullptr, d);
+	TreeNode<char>* d = new TreeNode<char>('d', nullptr, g, h);
+	TreeNode<char>* b = new TreeNode<char>('b', nullptr, nullptr, d);
 
 	TreeNode<char>* i = new TreeNode<char>('i');
-	TreeNode<char>* f = new TreeNode<char>('f', i);
+	TreeNode<char>* f = new TreeNode<char>('f',nullptr, i);
 	TreeNode<char>* e = new TreeNode<char>('e');
-	TreeNode<char>* c = new TreeNode<char>('c', e, f);
+	TreeNode<char>* c = new TreeNode<char>('c', nullptr, e, f);
 
-	TreeNode<char>* a = new TreeNode<char>('a', b, c);
+	TreeNode<char>* a = new TreeNode<char>('a', nullptr, b, c);
 
 	BinaryTree<char> t(a);
 
@@ -47,10 +47,12 @@ int main()
 	std::cout << "levelorderRec" << std::endl;
 	t.levelorder_rec();
 	
-        std::cout << "the height of tree is " << t.height() << std::endl;
-        std::cout << "the width of tree is " << t.width() << std::endl;
-        std::cout << "count of leaves is " << t.count_of_leaves() << std::endl;
-        std::cout << "count of nodes is " << t.count_of_nodes() << std::endl;
+    std::cout << "the height of tree is " << t.height() << std::endl;
+    std::cout << "the width of tree is " << t.width() << std::endl;
+    std::cout << "count of leaves is " << t.count_of_leaves() << std::endl;
+    std::cout << "count of nodes is " << t.count_of_nodes() << std::endl;
+    
+    t.levelorder_zigzag();
 	
 	return 0;
 }
