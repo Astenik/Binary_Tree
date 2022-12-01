@@ -25,6 +25,7 @@ public:
     void inorder_iter() const;
     void postorder_iter() const;
     void levelorder_iter() const;
+    void levelorder_zigzag() const;
     
     int height() const;
     int width() const; 
@@ -204,6 +205,49 @@ void BinaryTree<T>::levelorder_iter() const
         {
             q.push(r->right);
         }
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+void BinaryTree<T>::levelorder_zigzag() const
+{
+    std::queue<TreeNode<T>*> q;
+    std::stack<TreeNode<T>*> s;
+    bool l_r = true;
+    
+    q.push(m_root);
+    while(!q.empty() )
+    {
+        const int count = q.size();
+        for(int i = 0; i < count; ++i)
+        {
+            TreeNode<T>* r = q.front();
+            q.pop();
+            if(l_r)
+            {
+                std::cout << r->data << " ";
+            }
+            else 
+            {
+                s.push(r);
+            }
+            
+            if(r->left)
+            {
+                q.push(r->left);
+            }
+            if(r->right)
+            {
+                q.push(r->right);
+            }
+        }
+        while(!s.empty())
+        {
+            std::cout << s.top()->data << " ";
+            s.pop();
+        }
+        l_r = !l_r;
     }
     std::cout << std::endl;
 }
