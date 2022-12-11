@@ -17,11 +17,11 @@ public:
     bool contain(const T&) const;
     T Min() const;
     T Max() const;
-    
+
 private:
-    const TreeNode<T>* find(const T&) const;
-    const TreeNode<T>* Min_helper(TreeNode<T>*) const;
-    const TreeNode<T>* Max_helper(TreeNode<T>*) const;
+    TreeNode<T>* find(const T&) const;
+    TreeNode<T>* Min_helper(TreeNode<T>*) const;
+    TreeNode<T>* Max_helper(TreeNode<T>*) const;
 };
 
 template <typename T>
@@ -54,7 +54,7 @@ void BST<T>::insert(const T& d)
         }
         else
         {
-             return;
+            return;
         }
     }
     if(d < p->data)
@@ -74,7 +74,7 @@ bool BST<T>::contain(const T& d) const
 }
 
 template <typename T>
-const TreeNode<T>* BST<T>::find(const T& key) const
+TreeNode<T>* BST<T>::find(const T& key) const
 {
     if(this->m_root == nullptr)
     {
@@ -112,7 +112,7 @@ T BST<T>::Max() const
 }
 
 template <typename T>
-const TreeNode<T>* BST<T>::Min_helper(TreeNode<T>* k) const
+TreeNode<T>* BST<T>::Min_helper(TreeNode<T>* k) const
 {
     if(k == nullptr)
         return nullptr;
@@ -125,7 +125,7 @@ const TreeNode<T>* BST<T>::Min_helper(TreeNode<T>* k) const
 }
 
 template <typename T>
-const TreeNode<T>* BST<T>::Max_helper(TreeNode<T>* k) const
+TreeNode<T>* BST<T>::Max_helper(TreeNode<T>* k) const
 {
     if(k == nullptr)
         return nullptr;
@@ -140,31 +140,38 @@ const TreeNode<T>* BST<T>::Max_helper(TreeNode<T>* k) const
 template <typename T>
 void BST<T>::delete_element(const T& el)
 {
+    if(this->m_root == nullptr) return;
     TreeNode<T>* ptr = find(el);
-    if(ptr != nullptr)
+    if(ptr)
     {
-        if(ptr->right != nullptr)
+        while(ptr->right || ptr->left)
         {
-            TreeNode<T>* p1 = Min_helper(ptr->right);
-            ptr->data = p1->data;
-            ptr = p1;
-        }
-        else if(ptr->left != nullptr)
-        {
-            TreeNode<T>* p1 = Max_helper(ptr->left);
-            ptr->data = p1->data;
-            ptr = p1;
+            if ((ptr->right && ptr->left) || (!ptr->left && ptr->right))
+            {
+                T tmp = ptr->data;
+                ptr->data = Min_helper(ptr->right)->data;
+                ptr = Min_helper(ptr->right);
+                ptr->data = tmp;
+            }
+            else if(ptr->left && !ptr->right)
+            {
+                T tmp = ptr->data;
+                ptr->data = Max_helper(ptr->left)->data;
+                ptr = Max_helper(ptr->left);
+                ptr->data = tmp;
+            }
         }
         TreeNode<T>* p = ptr->parent;
-        if(p && p->left == ptr)
+        if(p->left == ptr)
         {
             p->left = nullptr;
+            delete ptr;
         }
-        else if(p && p->right == ptr)
+        else 
         {
             p->right = nullptr;
+            delete ptr;
         }
-        delete ptr;
         ptr = nullptr;
     }
 }
