@@ -52,6 +52,10 @@ void BST<T>::insert(const T& d)
             p = r;
             r = r->left;
         }
+        else
+        {
+             return;
+        }
     }
     if(d < p->data)
     {
