@@ -14,7 +14,7 @@ template <typename T>
 class Heap
 {
 public:
-    Heap(MaxMin);
+    Heap(const MaxMin&);
     ~Heap();
 
 public:
@@ -40,7 +40,7 @@ private:
 };
 
 template <typename T>
-Heap<T>::Heap(MaxMin state)
+Heap<T>::Heap(const MaxMin& state)
     : m_state(state)
 {}
 
@@ -64,8 +64,8 @@ void Heap<T>::remove_root()
     {
         throw "the Heap is empty.";
     }
-    
-    m_data[0] = m_data[m_data.back()];
+    int k = m_data.back();
+    m_data[0] = m_data[k];
     m_data.pop_back();
     heapifyDown(0);
     
@@ -127,13 +127,15 @@ void Heap<T>::heapifyUp(int i)
 {
     int current = i;
     int parent = parentIndex(current);
+    if(parent == -1)
+        return;
     if(m_state == Max)
     {
         while(parent >= 0 && m_data[current] > m_data[parent])
         {
             std::swap(m_data[current], m_data[parent]);
             current = parent;
-            parent = (current - 1) / 2;
+            parent = parentIndex(current);
         }
     }
     else if(m_state == Min)
@@ -151,45 +153,45 @@ template <typename T>
 void Heap<T>::heapifyDown(int i)
 {
     int current = i;
-    int maxchild = leftChildeIndex(current);
-    if(maxchild == -1)
+    int Mchild = leftChildeIndex(current);
+    if(Mchild == -1)
         return;
     if(m_state == Max)
     {
-        if(rightCildeIndex(current) != -1 && m_data[maxchild] < m_data[rightCildeIndex(current)])
+        if(rightCildeIndex(current) != -1 && m_data[Mchild] < m_data[rightCildeIndex(current)])
         {
-            maxchild = rightCildeIndex(current);
+            Mchild = rightCildeIndex(current);
         }
-        while(maxchild != - 1 && m_data[current] < m_data[maxchild])
+        while(Mchild != -1 && m_data[Mchild] > m_data[current])
         {
-            std::swap(m_data[current], m_data[maxchild]);
-            current = maxchild;
-            maxchild = leftChildeIndex(current);
-            if(maxchild == -1)
+            std::swap(m_data[Mchild], m_data[current]);
+            current = Mchild;
+            Mchild = leftChildeIndex(current);
+            if(Mchild == -1)
                 return;
-            if(rightCildeIndex(current) != -1 && m_data[maxchild] < m_data[rightCildeIndex(current)])
+            if(rightCildeIndex(current) != -1 && m_data[Mchild] < m_data[rightCildeIndex(current)])
             {
-                maxchild = rightCildeIndex(current);
-            }   
+                Mchild = rightCildeIndex(current);
+            }
         }
     }
     else if(m_state == Min)
     {
-        if(rightCildeIndex(current) != -1 && m_data[maxchild] > m_data[rightCildeIndex(current)])
+        if(rightCildeIndex(current) != -1 && m_data[Mchild] > m_data[rightCildeIndex(current)])
         {
-            maxchild = rightCildeIndex(current);
+            Mchild = rightCildeIndex(current);
         }
-        while(maxchild != - 1 && m_data[current] > m_data[maxchild])
+        while(Mchild != -1 && m_data[Mchild] < m_data[current])
         {
-            std::swap(m_data[current], m_data[maxchild]);
-            current = maxchild;
-            maxchild = leftChildeIndex(current);
-            if(maxchild == -1)
+            std::swap(m_data[Mchild], m_data[current]);
+            current = Mchild;
+            Mchild = leftChildeIndex(current);
+            if(Mchild == -1)
                 return;
-            if(m_data[maxchild] > m_data[rightCildeIndex(current)])
+            if(rightCildeIndex(current) != -1 && m_data[Mchild] > m_data[rightCildeIndex(current)])
             {
-                maxchild = rightCildeIndex(current);
-            }   
+                Mchild = rightCildeIndex(current);
+            }
         }
     }
 }
