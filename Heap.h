@@ -64,8 +64,7 @@ void Heap<T>::remove_root()
     {
         throw "the Heap is empty.";
     }
-    int k = m_data.back();
-    m_data[0] = m_data[k];
+    m_data[0] = m_data.back();
     m_data.pop_back();
     heapifyDown(0);
     
@@ -97,7 +96,7 @@ int Heap<T>::get_size() const
 template <typename T>
 void Heap<T>::print() const
 { 
-    for(int i = 0; i < m_data.size(); ++i)
+    for(int i = 0; i < get_size(); ++i)
     {
         std::cout << m_data[i] << " ";
     }
@@ -107,19 +106,19 @@ void Heap<T>::print() const
 template <typename T>
 int Heap<T>::leftChildeIndex(int i) const
 {
-    return 2*i + 1 < m_data.size() ? 2*i + 1 : -1;
+    return (2*i + 1) < m_data.size() ? 2*i + 1 : -1;
 }
 
 template <typename T>
 int Heap<T>::rightCildeIndex(int i) const
 {
-    return 2*i + 2 < m_data.size() ? 2*i + 2 : -1;
+    return (2*i + 2) < m_data.size() ? 2*i + 2 : -1;
 }
 
 template <typename T>
 int Heap<T>::parentIndex(int i) const
 {
-    return i == 0 ? -1 : (i - 1) / 2;
+    return (i == 0) ? -1 : (i - 1) / 2;
 }
 
 template <typename T>
@@ -162,7 +161,7 @@ void Heap<T>::heapifyDown(int i)
         {
             Mchild = rightCildeIndex(current);
         }
-        while(Mchild != -1 && m_data[Mchild] > m_data[current])
+        while(m_data[Mchild] > m_data[current])
         {
             std::swap(m_data[Mchild], m_data[current]);
             current = Mchild;
@@ -181,7 +180,7 @@ void Heap<T>::heapifyDown(int i)
         {
             Mchild = rightCildeIndex(current);
         }
-        while(Mchild != -1 && m_data[Mchild] < m_data[current])
+        while(m_data[Mchild] < m_data[current])
         {
             std::swap(m_data[Mchild], m_data[current]);
             current = Mchild;
