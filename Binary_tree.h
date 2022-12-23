@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <cmath>
 
 #include "TreeNode.h"
 
@@ -32,7 +33,9 @@ public:
     int count_of_leaves() const;
     int count_of_nodes() const;
     
+    void fullLevels() const;
     void clear();
+    //void fullLevelsRec();
 
 private:
     void preorder_rec_helper(TreeNode<T>*) const;
@@ -259,12 +262,80 @@ int BinaryTree<T>::height() const
 }
 
 template <typename T>
+void BinaryTree<T>::fullLevels() const
+{
+    std::queue<TreeNode<T>*> q;
+    q.push(m_root);
+    int level = 0;
+    while(!q.empty())
+    {
+        const int count = q.size();
+        for(int i = 0; i < count; ++i)
+        {
+            TreeNode<T>* p = q.front();
+            q.pop();
+            if(p->left)
+            {
+                q.push(p->left);
+            }
+            if(p->right)
+            {
+                q.push(p->right);
+            }
+        }
+        if(level != 0 && pow(2, level) == count)
+        {
+            std::cout << level - 1 << " ";
+        }
+        ++level;
+    }
+}
+
+template <typename T>
 void BinaryTree<T>::clear()
 {
     clear_helper(m_root);
     m_root = nullptr;
 }
 
+/*template <typename T>
+void BinaryTree<T>::fullLevelsRec() 
+{
+    if(q1.empty())
+    {
+        if(level != 0)
+            return;
+        if(m_root->left)
+        {
+            q1.push(m_root->left);
+        }
+        if(m_root->right)
+        {
+            q1.push(m_root->right);
+        }
+    }
+    const int count = q1.size();
+    for(int i = 0; i < count; ++i)
+    {
+        TreeNode<T>* p = q1.front();
+        q1.pop();
+        if(p->left)
+        {
+            q1.push(p->left);
+        }
+        if(p->right)
+        {
+            q1.push(p->right);
+        }
+    }
+    if(pow(2, level) == count)
+    {
+        std::cout << level - 1 << " ";
+    }
+    ++level;
+    fullLevelsRec();
+}
+*/
 template <typename T>
 int BinaryTree<T>::width() const
 {
