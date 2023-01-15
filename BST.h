@@ -18,10 +18,15 @@ public:
     T Min() const;
     T Max() const;
 
+public:
+    bool operator==(const BST<T>&& obj) const;
+
 private:
     TreeNode<T>* find(const T&) const;
     TreeNode<T>* Min_helper(TreeNode<T>*) const;
     TreeNode<T>* Max_helper(TreeNode<T>*) const;
+    
+    bool HelperOperator(TreeNode<T>* p1, TreeNode<T>* p2) const;
 };
 
 template <typename T>
@@ -174,4 +179,24 @@ void BST<T>::delete_element(const T& el)
         }
         ptr = nullptr;
     }
+}
+
+template <typename T>
+bool BST<T>::operator==(const BST<T>&& obj) const
+{
+    if(this == &obj)
+        return true;
+    return HelperOperator(this->m_root, obj.m_root);
+}
+
+template <typename T>
+bool BST<T>::HelperOperator(TreeNode<T>* p1, TreeNode<T>* p2) const 
+{
+    if(p1 == nullptr && p2 == nullptr)
+        return true;
+    if((p1 && !p2) || (!p1 && p2))
+        return false;
+    if(p1 && p2 && p1->data != p2->data)
+        return false;
+    return HelperOperator(p1->left, p2->left) && HelperOperator(p1->right, p2->right);
 }
