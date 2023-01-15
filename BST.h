@@ -19,7 +19,7 @@ public:
     T Max() const;
 
 public:
-    bool operator==(const BST<T>&& obj) const;
+    bool operator==(const BST<T>& obj) const;
 
 private:
     TreeNode<T>* find(const T&) const;
@@ -182,7 +182,7 @@ void BST<T>::delete_element(const T& el)
 }
 
 template <typename T>
-bool BST<T>::operator==(const BST<T>&& obj) const
+bool BST<T>::operator==(const BST<T>& obj) const
 {
     if(this == &obj)
         return true;
