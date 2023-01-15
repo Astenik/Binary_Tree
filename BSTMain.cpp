@@ -28,13 +28,11 @@ int main()
     std::cout << "tree height is equal to: " << tree.height() << std::endl;
     std::cout << "tree width is equal to: " << tree.width() <<std::endl;
     
-    std:: << "two trees are equal: " << " ";
+    std::cout << "two trees are equal: " << " ";
     if(tree == tree1)
         std::cout << "true" << std::endl;
     else
-    {
         std::cout << "false" << std::endl;
-    }
-    
+
     return 0;
 }
